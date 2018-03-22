@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!--分割线-->
+    <FrameLayout
+        android:id="@+id/line"
+        android:layout_width="25dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true">
+
+        <com.muzi.library.widget.BiasView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <!--起租日期-->
+    <LinearLayout
+        android:id="@+id/viewStart"
+        android:layout_width="158dp"
+        android:layout_height="60dp"
+        android:layout_toStartOf="@id/line"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textMonthStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textNormal"
+            android:textSize="20sp"
+            tools:text="2018年11月" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="起租"
+            android:textColor="@color/textMonth"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <!--归还日期-->
+    <LinearLayout
+        android:id="@+id/viewEnd"
+        android:layout_width="158dp"
+        android:layout_height="60dp"
+        android:layout_toEndOf="@id/line"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="租期结束"
+            android:textColor="@color/bgSelected"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textMonthEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textNormal"
+            android:textSize="20sp"
+            android:visibility="gone"
+            tools:text="2018年12月" />
+
+        <TextView
+            android:id="@+id/textMontEndMark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="归还"
+            android:textColor="@color/textMonth"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!--星期-->
+    <LinearLayout
+        android:id="@+id/viewWeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewStart"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/weekStyle"
+            android:text="日" />
+
+        <TextView
+            style="@style/weekStyle"
+            android:text="一" />
+
+        <TextView
+            style="@style/weekStyle"
+            android:text="二" />
+
+        <TextView
+            style="@style/weekStyle"
+            android:text="三" />
+
+        <TextView
+            style="@style/weekStyle"
+            android:text="四" />
+
+        <TextView
+            style="@style/weekStyle"
+            android:text="五" />
+
+        <TextView
+            style="@style/weekStyle"
+            android:text="六" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/viewWeek" />
+
+</RelativeLayout>

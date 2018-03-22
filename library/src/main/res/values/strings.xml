@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">library</string>
+
+    <string name="calendarStart">起租</string>
+    <string name="calendarEnd">归还</string>
+
+</resources>

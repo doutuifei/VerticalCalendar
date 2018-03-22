@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#ffffff</color>
+    <color name="textNormal">#0e0e0e</color>
+    <color name="textUnable">#aaaaaa</color>
+    <color name="textMonth">#aaaaaa</color>
+    <color name="textSelected">#ffffff</color>
+    <color name="textWeek">#717171</color>
+    <color name="bgSelected">#019aea</color>
+    <color name="bgBetween">#80CCF4</color>
+
+</resources>
