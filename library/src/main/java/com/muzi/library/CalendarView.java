@@ -267,36 +267,7 @@ public class CalendarView extends RelativeLayout {
                     endSelectBean.setSelectDay(dayPosition);
 
                     //更改中间的状态
-                    if (startSelectBean.getSelectRv() == endSelectBean.getSelectRv()) {
-                        //在同一个月
-                        for (int i = startSelectBean.getSelectRv(); i <= endSelectBean.getSelectRv(); i++) {
-                            tempDayBeanList = monthList.get(i).getDayList();
-                            for (int j = startSelectBean.getSelectDay() + 1; j < endSelectBean.getSelectDay(); j++) {
-                                tempDayBeanList.get(j).setSelectState(SelectState.BETWEEN);
-                            }
-                        }
-                    } else {
-                        //跨月
-                        for (int i = startSelectBean.getSelectRv(); i <= endSelectBean.getSelectRv(); i++) {
-                            tempDayBeanList = monthList.get(i).getDayList();
-                            if (i == startSelectBean.getSelectRv()) {
-                                //开始月份
-                                for (int i1 = startSelectBean.getSelectDay() + 1; i1 < tempDayBeanList.size(); i1++) {
-                                    tempDayBeanList.get(i1).setSelectState(SelectState.BETWEEN);
-                                }
-                            } else if (i == endSelectBean.getSelectRv()) {
-                                //结束月份
-                                for (int i1 = 0; i1 < endSelectBean.getSelectDay(); i1++) {
-                                    tempDayBeanList.get(i1).setSelectState(SelectState.BETWEEN);
-                                }
-                            } else if (i > startSelectBean.getSelectRv() && i < endSelectBean.getSelectRv()) {
-                                //中间月份
-                                for (int i1 = 0; i1 < tempDayBeanList.size(); i1++) {
-                                    tempDayBeanList.get(i1).setSelectState(SelectState.BETWEEN);
-                                }
-                            }
-                        }
-                    }
+                    changeBetweenState(SelectState.BETWEEN);
                 } else {
                     //更改开始
                     clear();
@@ -347,40 +318,49 @@ public class CalendarView extends RelativeLayout {
             monthList.get(endSelectBean.getSelectRv()).getDayList().get(endSelectBean.getSelectDay()).setSelectState(SelectState.NONE);
 
             //更改中间的状态
-            if (startSelectBean.getSelectRv() == endSelectBean.getSelectRv()) {
-                //在同一个月
-                for (int i = startSelectBean.getSelectRv() + 1; i <= endSelectBean.getSelectRv(); i++) {
-                    tempDayBeanList = monthList.get(i).getDayList();
-                    for (int j = startSelectBean.getSelectDay() + 1; j < endSelectBean.getSelectDay(); j++) {
-                        tempDayBeanList.get(j).setSelectState(SelectState.NONE);
-                    }
-                }
-            } else {
-                //跨月
-                for (int i = startSelectBean.getSelectRv(); i <= endSelectBean.getSelectRv(); i++) {
-                    tempDayBeanList = monthList.get(i).getDayList();
-                    if (i == startSelectBean.getSelectRv()) {
-                        //开始月份
-                        for (int i1 = startSelectBean.getSelectDay() + 1; i1 < tempDayBeanList.size(); i1++) {
-                            tempDayBeanList.get(i1).setSelectState(SelectState.NONE);
-                        }
-                    } else if (i == endSelectBean.getSelectRv()) {
-                        //结束月份
-                        for (int i1 = 0; i1 < endSelectBean.getSelectDay(); i1++) {
-                            tempDayBeanList.get(i1).setSelectState(SelectState.NONE);
-                        }
-                    } else if (i > startSelectBean.getSelectRv() && i < endSelectBean.getSelectRv()) {
-                        //中间月份
-                        for (int i1 = 0; i1 < tempDayBeanList.size(); i1++) {
-                            tempDayBeanList.get(i1).setSelectState(SelectState.NONE);
-                        }
-                    }
-                }
-            }
+            changeBetweenState(SelectState.NONE);
         }
 
         startSelectBean = null;
         endSelectBean = null;
+    }
+
+    /**
+     * 更改区间状态
+     *
+     * @param state
+     */
+    private void changeBetweenState(@SelectState.State int state) {
+        if (startSelectBean.getSelectRv() == endSelectBean.getSelectRv()) {
+            //在同一个月
+            for (int i = startSelectBean.getSelectRv(); i <= endSelectBean.getSelectRv(); i++) {
+                tempDayBeanList = monthList.get(i).getDayList();
+                for (int j = startSelectBean.getSelectDay() + 1; j < endSelectBean.getSelectDay(); j++) {
+                    tempDayBeanList.get(j).setSelectState(state);
+                }
+            }
+        } else {
+            //跨月
+            for (int i = startSelectBean.getSelectRv(); i <= endSelectBean.getSelectRv(); i++) {
+                tempDayBeanList = monthList.get(i).getDayList();
+                if (i == startSelectBean.getSelectRv()) {
+                    //开始月份
+                    for (int i1 = startSelectBean.getSelectDay() + 1; i1 < tempDayBeanList.size(); i1++) {
+                        tempDayBeanList.get(i1).setSelectState(state);
+                    }
+                } else if (i == endSelectBean.getSelectRv()) {
+                    //结束月份
+                    for (int i1 = 0; i1 < endSelectBean.getSelectDay(); i1++) {
+                        tempDayBeanList.get(i1).setSelectState(state);
+                    }
+                } else if (i > startSelectBean.getSelectRv() && i < endSelectBean.getSelectRv()) {
+                    //中间月份
+                    for (int i1 = 0; i1 < tempDayBeanList.size(); i1++) {
+                        tempDayBeanList.get(i1).setSelectState(state);
+                    }
+                }
+            }
+        }
     }
 
     /**
