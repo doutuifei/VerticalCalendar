@@ -153,7 +153,7 @@ public class CalendarView extends RelativeLayout {
                 if (CalendarUtils.equalsCalendar(curreCalendar, todayCalendar)) {
                     dayBean.setSelectState(SelectState.UNABLE);
                     dayBean.setCurreDay(true);
-                    dayBean.setContent("今天");
+                    dayBean.setContent(getContext().getString(R.string.today));
                 }
 
                 //如果是今天之前就unable
@@ -263,7 +263,7 @@ public class CalendarView extends RelativeLayout {
 
                     //更改结束的状态
                     dayBean.setSelectState(SelectState.END);
-                    dayBean.setContent("归还");
+                    dayBean.setContent(getContext().getString(R.string.calendarEnd));
                     endSelectBean = new SelectBean();
                     endSelectBean.setDayBean(dayBean);
                     endSelectBean.setSelectRv(rvPosition);
@@ -275,7 +275,7 @@ public class CalendarView extends RelativeLayout {
                     //更改开始
                     clear();
                     dayBean.setSelectState(SelectState.PREVIEW_START);
-                    dayBean.setContent("起租");
+                    dayBean.setContent(getContext().getString(R.string.calendarStart));
                     startSelectBean = new SelectBean();
                     startSelectBean.setDayBean(dayBean);
                     startSelectBean.setSelectRv(rvPosition);
@@ -285,13 +285,13 @@ public class CalendarView extends RelativeLayout {
             case SelectState.SINGLE:
                 //开始和结束重合
                 dayBean.setSelectState(SelectState.PREVIEW_START);
-                dayBean.setContent("起租");
+                dayBean.setContent(getContext().getString(R.string.calendarStart));
                 endSelectBean = null;
                 break;
             case SelectState.PREVIEW_START:
                 //准备开始
                 dayBean.setSelectState(SelectState.SINGLE);
-                dayBean.setContent("一天");
+                dayBean.setContent(getContext().getString(R.string.onDay));
                 endSelectBean = new SelectBean();
                 endSelectBean.setDayBean(dayBean);
                 endSelectBean.setSelectRv(rvPosition);
@@ -301,7 +301,7 @@ public class CalendarView extends RelativeLayout {
                 //开始
                 clear();
                 dayBean.setSelectState(SelectState.PREVIEW_START);
-                dayBean.setContent("起租");
+                dayBean.setContent(getContext().getString(R.string.calendarStart));
                 startSelectBean = new SelectBean();
                 startSelectBean.setDayBean(dayBean);
                 startSelectBean.setSelectRv(rvPosition);
@@ -312,7 +312,7 @@ public class CalendarView extends RelativeLayout {
                 //中间
                 clear();
                 dayBean.setSelectState(SelectState.PREVIEW_START);
-                dayBean.setContent("起租");
+                dayBean.setContent(getContext().getString(R.string.calendarStart));
                 startSelectBean = new SelectBean();
                 startSelectBean.setDayBean(dayBean);
                 startSelectBean.setSelectRv(rvPosition);
@@ -323,7 +323,7 @@ public class CalendarView extends RelativeLayout {
                 //结束
                 clear();
                 dayBean.setSelectState(SelectState.PREVIEW_START);
-                dayBean.setContent("起租");
+                dayBean.setContent(getContext().getString(R.string.calendarStart));
                 startSelectBean = new SelectBean();
                 startSelectBean.setDayBean(dayBean);
                 startSelectBean.setSelectRv(rvPosition);
@@ -338,11 +338,11 @@ public class CalendarView extends RelativeLayout {
                 endSelectBean.getDayBean().getCalendar().before(startSelectBean.getDayBean().getCalendar())) {
 
             selectDayBean = monthList.get(startSelectBean.getSelectRv()).getDayList().get(startSelectBean.getSelectDay());
-            selectDayBean.setContent("归还");
+            selectDayBean.setContent(getContext().getString(R.string.calendarEnd));
             selectDayBean.setSelectState(SelectState.END);
 
             selectDayBean = monthList.get(endSelectBean.getSelectRv()).getDayList().get(endSelectBean.getSelectDay());
-            selectDayBean.setContent("起租");
+            selectDayBean.setContent(getContext().getString(R.string.calendarStart));
             selectDayBean.setSelectState(SelectState.START);
 
             try {

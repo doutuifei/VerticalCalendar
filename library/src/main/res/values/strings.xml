@@ -3,5 +3,7 @@
 
     <string name="calendarStart">起租</string>
     <string name="calendarEnd">归还</string>
+    <string name="onDay">一天</string>
+    <string name="today">今天</string>
 
 </resources>
