@@ -9,6 +9,7 @@ public class SelectBean {
 
     private int selectRv;
     private int selectDay;
+    private DayBean dayBean;
 
     public SelectBean() {
     }
@@ -32,5 +33,13 @@ public class SelectBean {
 
     public void setSelectDay(int selectDay) {
         this.selectDay = selectDay;
+    }
+
+    public DayBean getDayBean() {
+        return dayBean;
+    }
+
+    public void setDayBean(DayBean dayBean) {
+        this.dayBean = dayBean;
     }
 }
