@@ -14,6 +14,7 @@ import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.muzi.library.adapter.CalendarAdapter;
 import com.muzi.library.bean.DayBean;
 import com.muzi.library.bean.MonthBean;
+import com.muzi.library.bean.SelectBean;
 import com.muzi.library.manager.MLinearLayoutManager;
 import com.muzi.library.utils.CalendarUtils;
 
@@ -76,6 +77,15 @@ public class CalendarView extends RelativeLayout {
 
     private int rvPosition = -1;
 
+    /**
+     * 选中日期
+     */
+    private SelectBean selectBean;
+    private DayBean selectDayBean;
+    private List<DayBean> tempDayBeanList;
+    private List<SelectBean> selectList = new ArrayList<>();
+
+
     public CalendarView(Context context) {
         this(context, null);
     }
@@ -137,15 +147,18 @@ public class CalendarView extends RelativeLayout {
 
                 //是否是today
                 if (CalendarUtils.equalsCalendar(curreCalendar, todayCalendar)) {
-                    dayBean.setEnabel(false);
+                    dayBean.setSelectState(SelectState.UNABLE);
                     dayBean.setCurreDay(true);
                     dayBean.setContent("今天");
                 }
 
                 //如果是今天之前就unable
                 if (curreCalendar.before(todayCalendar)) {
-                    dayBean.setEnabel(false);
+                    dayBean.setSelectState(SelectState.UNABLE);
                 }
+
+                //默认选中
+                onDefaultSelect(curreCalendar, dayBean);
 
                 dayList.add(dayBean);
             }
@@ -186,7 +199,7 @@ public class CalendarView extends RelativeLayout {
                 break;
         }
         for (int i = 0; i < tempEmptyDayNum; i++) {
-            dayList.add(new DayBean(true, false));
+            dayList.add(new DayBean(true));
         }
         tempEmptyDayNum = 0;
     }
@@ -201,7 +214,7 @@ public class CalendarView extends RelativeLayout {
         recyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
             @Override
             public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (view.getId()==R.id.rvMonth){
+                if (view.getId() == R.id.rvMonth) {
                     rvPosition = position;
                 }
             }
@@ -210,12 +223,80 @@ public class CalendarView extends RelativeLayout {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (rvPosition > -1) {
-                    monthList.get(rvPosition).getDayList().get(position).setSelect(true);
+                    handleClick(rvPosition, position);
+                    //刷新adapter
                     calendarAdapter.notifyDataSetChanged();
                     rvPosition = -1;
                 }
             }
         });
+    }
+
+    /**
+     * 点击事件处理
+     *
+     * @param rvPosition-recyclerView position
+     * @param dayPosition-day         position
+     */
+    private void handleClick(int rvPosition, int dayPosition) {
+        dayBean = monthList.get(rvPosition).getDayList().get(dayPosition);
+        switch (dayBean.getSelectState()) {
+            case SelectState.NONE:
+                if (selectList.size() == 1) {
+                    //已经选择开始
+
+                    //更改开始的状态
+                    selectBean = selectList.get(0);
+                    selectDayBean = monthList.get(selectBean.getSelectRv()).getDayList().get(selectBean.getSelectDay());
+                    selectDayBean.setSelectState(SelectState.START);
+
+                    //更改中间的状态
+                    for (int i = selectBean.getSelectRv(); i <= rvPosition; i++) {
+                        tempDayBeanList = monthList.get(i).getDayList();
+                        for (int j = selectBean.getSelectDay() + 1; j < dayPosition; j++) {
+                            tempDayBeanList.get(j).setSelectState(SelectState.BETWEEN);
+                            selectList.add(new SelectBean(i, j));
+                        }
+                    }
+
+                    //更改结束的状态
+                    dayBean.setSelectState(SelectState.END);
+                    dayBean.setContent("归还");
+                    selectList.add(new SelectBean(rvPosition, dayPosition));
+                } else {
+                    //重置选项,选择开始
+                    clear();
+                    dayBean.setSelectState(SelectState.SINGLE);
+                    dayBean.setContent("起租");
+                    selectList.add(new SelectBean(rvPosition, dayPosition));
+                }
+                break;
+            case SelectState.SINGLE:
+                //开始和结束重合
+                dayBean.setSelectState(SelectState.NONE);
+                break;
+            case SelectState.START:
+                //开始
+                dayBean.setSelectState(SelectState.SINGLE);
+                break;
+            case SelectState.BETWEEN:
+                //中间
+                dayBean.setSelectState(SelectState.END);
+                break;
+            case SelectState.END:
+                //结束
+                dayBean.setSelectState(SelectState.NONE);
+                break;
+        }
+    }
+
+    /**
+     * 默认选中
+     *
+     * @param calendar
+     */
+    private void onDefaultSelect(Calendar calendar, DayBean dayBean) {
+
     }
 
     /**
@@ -226,7 +307,7 @@ public class CalendarView extends RelativeLayout {
             for (DayBean dayBean : monthBean.getDayList()) {
                 String date;
                 date = dayBean.getYear() + "-" + dayBean.getMonth() + "-" + dayBean.getDay() +
-                        "星期" + dayBean.getWeek() + "是否今天" + dayBean.isCurreDay() + "是否可用" + dayBean.isEnabel();
+                        "星期" + dayBean.getWeek() + "是否今天" + dayBean.isCurreDay() + "状态" + dayBean.getSelectState();
                 Log.d("CalendarView", date);
             }
         }
@@ -236,6 +317,11 @@ public class CalendarView extends RelativeLayout {
      * 清空选项
      */
     public void clear() {
+        for (SelectBean bean : selectList) {
+            monthList.get(bean.getSelectRv()).getDayList().get(bean.getSelectDay()).setSelectState(SelectState.NONE);
+            monthList.get(bean.getSelectRv()).getDayList().get(bean.getSelectDay()).setContent(null);
+        }
+        selectList.clear();
     }
 
 }

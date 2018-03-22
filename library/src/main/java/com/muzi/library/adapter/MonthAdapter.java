@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.muzi.library.R;
+import com.muzi.library.SelectState;
 import com.muzi.library.bean.DayBean;
 import com.muzi.library.utils.StringUtils;
 
@@ -45,21 +46,43 @@ public class MonthAdapter extends BaseQuickAdapter<DayBean, BaseViewHolder> {
             helper.setGone(R.id.textState, true);
         }
 
-        //可点击
-        if (item.isEnabel()) {
-            helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.textNormal));
-        } else {
-            helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.textUnable));
-        }
-        helper.getView(R.id.viewDay).setEnabled(item.isEnabel());
-
-        //选中状态
-        if (item.isSelect()) {
-            helper.setBackgroundRes(R.id.viewDay, R.drawable.bg_start);
-            helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.white));
-            helper.setTextColor(R.id.textState, ContextCompat.getColor(context, R.color.white));
-        } else {
-            helper.setBackgroundRes(R.id.viewDay, 0);
+        //状态判断
+        switch (item.getSelectState()) {
+            case SelectState.UNABLE:
+                //不可用
+                helper.setBackgroundRes(R.id.viewDay, 0);
+                helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.textUnable));
+                helper.getView(R.id.viewDay).setEnabled(false);
+                break;
+            case SelectState.NONE:
+                //没有选中
+                helper.setBackgroundRes(R.id.viewDay, 0);
+                helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.textNormal));
+                break;
+            case SelectState.SINGLE:
+                //开始和结束重合
+                helper.setBackgroundRes(R.id.viewDay, R.drawable.bg_single);
+                helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.white));
+                helper.setTextColor(R.id.textState, ContextCompat.getColor(context, R.color.white));
+                break;
+            case SelectState.START:
+                //开始
+                helper.setBackgroundRes(R.id.viewDay, R.drawable.bg_start);
+                helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.white));
+                helper.setTextColor(R.id.textState, ContextCompat.getColor(context, R.color.white));
+                break;
+            case SelectState.BETWEEN:
+                //中间
+                helper.setBackgroundRes(R.id.viewDay, R.drawable.bg_between);
+                helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.white));
+                helper.setTextColor(R.id.textState, ContextCompat.getColor(context, R.color.white));
+                break;
+            case SelectState.END:
+                //结束
+                helper.setBackgroundRes(R.id.viewDay, R.drawable.bg_end);
+                helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.white));
+                helper.setTextColor(R.id.textState, ContextCompat.getColor(context, R.color.white));
+                break;
         }
 
     }

@@ -1,5 +1,7 @@
 package com.muzi.library.bean;
 
+import com.muzi.library.SelectState;
+
 /**
  * Created by muzi on 2018/3/21.
  * 727784430@qq.com
@@ -12,19 +14,14 @@ public class DayBean {
      */
     private boolean isCurreDay;
     /**
-     * 是否选中
-     */
-    private boolean isSelect;
-    /**
-     * 是否可以点击
-     * 如果不可以内容置灰
-     */
-    private boolean enabel = true;
-    /**
      * 补全空白
      */
     private boolean isEmpty = false;
+    /**
+     * 星期：每月第一天才有
+     */
     private String week;
+
     private int month;
     private int year;
     private int day;
@@ -35,14 +32,14 @@ public class DayBean {
     /**
      * 选中状态:
      */
-    private int selectState;
+    @SelectState.State
+    private int selectState = SelectState.NONE;
 
     public DayBean() {
     }
 
-    public DayBean(boolean isEmpty, boolean enabel) {
+    public DayBean(boolean isEmpty) {
         this.isEmpty = isEmpty;
-        this.enabel = enabel;
     }
 
     public boolean isCurreDay() {
@@ -51,22 +48,6 @@ public class DayBean {
 
     public void setCurreDay(boolean curreDay) {
         isCurreDay = curreDay;
-    }
-
-    public boolean isSelect() {
-        return isSelect;
-    }
-
-    public void setSelect(boolean select) {
-        isSelect = select;
-    }
-
-    public boolean isEnabel() {
-        return enabel;
-    }
-
-    public void setEnabel(boolean enabel) {
-        this.enabel = enabel;
     }
 
     public String getWeek() {
@@ -117,6 +98,13 @@ public class DayBean {
         this.content = content;
     }
 
+    public int getSelectState() {
+        return selectState;
+    }
+
+    public void setSelectState(@SelectState.State int selectState) {
+        this.selectState = selectState;
+    }
 
     @Override
     public String toString() {
