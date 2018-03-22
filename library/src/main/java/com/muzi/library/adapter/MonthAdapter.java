@@ -65,6 +65,12 @@ public class MonthAdapter extends BaseQuickAdapter<DayBean, BaseViewHolder> {
                 helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.white));
                 helper.setTextColor(R.id.textState, ContextCompat.getColor(context, R.color.white));
                 break;
+            case SelectState.PREVIEW_START:
+                //准备开始
+                helper.setBackgroundRes(R.id.viewDay, R.drawable.bg_single);
+                helper.setTextColor(R.id.textDay, ContextCompat.getColor(context, R.color.white));
+                helper.setTextColor(R.id.textState, ContextCompat.getColor(context, R.color.white));
+                break;
             case SelectState.START:
                 //开始
                 helper.setBackgroundRes(R.id.viewDay, R.drawable.bg_start);

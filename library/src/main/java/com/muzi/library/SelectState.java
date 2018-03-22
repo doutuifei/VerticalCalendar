@@ -20,8 +20,9 @@ public class SelectState {
     public static final int BETWEEN = 2;//中间值
     public static final int END = 3;//结束
     public static final int SINGLE = 4;//开始和结束合并
+    public static final int PREVIEW_START = 5;//准备开始
 
-    @IntDef({UNABLE, NONE, START, BETWEEN, END, SINGLE})
+    @IntDef({UNABLE, NONE, START, BETWEEN, END, SINGLE, PREVIEW_START})
     @Retention(RetentionPolicy.SOURCE)
     public @interface State {
     }

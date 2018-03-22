@@ -1,13 +1,16 @@
 package com.muzi.library.bean;
 
 import com.muzi.library.SelectState;
+import com.muzi.library.utils.CalendarUtils;
+
+import java.util.Calendar;
 
 /**
  * Created by muzi on 2018/3/21.
  * 727784430@qq.com
  */
 
-public class DayBean {
+public class DayBean implements Cloneable {
 
     /**
      * 是否今天
@@ -110,4 +113,13 @@ public class DayBean {
     public String toString() {
         return year + "-" + month + "-" + day;
     }
+
+    public Calendar getCalendar() {
+        return CalendarUtils.getCurreCalendar(year, month - 1, day);
+    }
+
+    public DayBean clone() throws CloneNotSupportedException {
+        return (DayBean) super.clone();
+    }
+
 }

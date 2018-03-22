@@ -5,7 +5,7 @@ package com.muzi.library.bean;
  * 727784430@qq.com
  */
 
-public class SelectBean {
+public class SelectBean implements Cloneable {
 
     private int selectRv;
     private int selectDay;
@@ -17,6 +17,12 @@ public class SelectBean {
     public SelectBean(int selectRv, int selectDay) {
         this.selectRv = selectRv;
         this.selectDay = selectDay;
+    }
+
+    public SelectBean(int selectRv, int selectDay, DayBean dayBean) {
+        this.selectRv = selectRv;
+        this.selectDay = selectDay;
+        this.dayBean = dayBean;
     }
 
     public int getSelectRv() {
@@ -42,4 +48,11 @@ public class SelectBean {
     public void setDayBean(DayBean dayBean) {
         this.dayBean = dayBean;
     }
+
+    public SelectBean clone() throws CloneNotSupportedException {
+        SelectBean selectBean = (SelectBean) super.clone();
+        selectBean.setDayBean(dayBean.clone());
+        return selectBean;
+    }
+
 }

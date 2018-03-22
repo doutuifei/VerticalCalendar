@@ -1,5 +1,6 @@
 package com.muzi.library.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * 727784430@qq.com
  */
 
-public class MonthBean {
+public class MonthBean implements Cloneable {
 
     private int year;
     private int month;
@@ -38,6 +39,14 @@ public class MonthBean {
 
     public void setDayList(List<DayBean> dayList) {
         this.dayList = dayList;
+    }
+
+    public MonthBean clone() throws CloneNotSupportedException {
+        MonthBean monthBean = (MonthBean) super.clone();
+        List<DayBean> list = new ArrayList<>();
+        list.addAll(dayList);
+        monthBean.setDayList(list);
+        return monthBean;
     }
 
 }
