@@ -2,9 +2,9 @@ package com.muzi.verticalcalendar;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.muzi.library.CalendarView;
 import com.muzi.library.bean.DayBean;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDays(int day) {
                 super.onDays(day);
-                Toast.makeText(MainActivity.this, "day:" + day, Toast.LENGTH_SHORT).show();
+                Log.d("MainActivity", "day:" + day);
             }
         });
     }

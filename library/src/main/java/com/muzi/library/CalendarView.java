@@ -363,7 +363,6 @@ public class CalendarView extends RelativeLayout {
      * 处理回调
      */
     private void handleListener() {
-
         if (startSelectBean != null) {
             if (onCalendarChange != null) {
                 onCalendarChange.onStart(startSelectBean.getDayBean());
@@ -391,7 +390,6 @@ public class CalendarView extends RelativeLayout {
                 onCalendarChange.onDays(days + 1);
             }
         }
-
     }
 
 
@@ -423,6 +421,7 @@ public class CalendarView extends RelativeLayout {
      */
     public void resetState() {
         clear();
+        calendarAdapter.notifyDataSetChanged();
         changeStartText(true);
         changeEndText(true);
     }
@@ -434,9 +433,6 @@ public class CalendarView extends RelativeLayout {
      * @param content
      */
     private void changeStartState(@SelectState.State int state, String content) {
-        if (startSelectBean == null) {
-            return;
-        }
         monthList.get(startSelectBean.getSelectRv()).getDayList().get(startSelectBean.getSelectDay()).setContent(content);
         monthList.get(startSelectBean.getSelectRv()).getDayList().get(startSelectBean.getSelectDay()).setSelectState(state);
     }
@@ -448,9 +444,6 @@ public class CalendarView extends RelativeLayout {
      * @param content
      */
     private void changeEndState(@SelectState.State int state, String content) {
-        if (endSelectBean == null) {
-            return;
-        }
         monthList.get(endSelectBean.getSelectRv()).getDayList().get(endSelectBean.getSelectDay()).setContent(content);
         monthList.get(endSelectBean.getSelectRv()).getDayList().get(endSelectBean.getSelectDay()).setSelectState(state);
     }
