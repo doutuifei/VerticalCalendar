@@ -8,7 +8,14 @@
     tools:context="com.muzi.verticalcalendar.MainActivity">
 
 
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="清空" />
+
     <com.muzi.library.CalendarView
+        android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -3,7 +3,6 @@ package com.muzi.library;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -46,14 +45,14 @@ public class CalendarView extends RelativeLayout {
     /**
      * 开始日期
      */
+    private TextView textStart;
     private TextView textMonthStart;
+    private TextView textMontStartMark;
+
     /**
      * 租期结束
      */
     private TextView textEnd;
-    /**
-     * 结束日期
-     */
     private TextView textMonthEnd;
     private TextView textMontEndMark;
 
@@ -84,11 +83,10 @@ public class CalendarView extends RelativeLayout {
     private List<DayBean> tempDayBeanList;
 
     //开始和结束
+    private int days;
     private SelectBean startSelectBean;
     private SelectBean endSelectBean;
     private SelectBean tempSelectBean;
-
-    private Calendar startCalendar, endCalendar;
 
     public CalendarView(Context context) {
         this(context, null);
@@ -98,7 +96,10 @@ public class CalendarView extends RelativeLayout {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.view_calendar, this, true);
         recyclerView = findViewById(R.id.recyclerView);
+        textStart = findViewById(R.id.textStart);
         textMonthStart = findViewById(R.id.textMonthStart);
+        textMontStartMark = findViewById(R.id.textMontStartMark);
+
         textEnd = findViewById(R.id.textEnd);
         textMonthEnd = findViewById(R.id.textMonthEnd);
         textMontEndMark = findViewById(R.id.textMontEndMark);
@@ -113,7 +114,6 @@ public class CalendarView extends RelativeLayout {
         curreYear = todayCalendar.get(Calendar.YEAR);
         curreMonth = (todayCalendar.get(Calendar.MONTH) + 1);
         curreDay = todayCalendar.get(Calendar.DAY_OF_MONTH);
-        textMonthStart.setText(curreYear + "月" + curreMonth + "日");
     }
 
     /**
@@ -172,7 +172,7 @@ public class CalendarView extends RelativeLayout {
 
             monthList.add(monthBean);
         }
-//        printLog();
+
     }
 
     /**
@@ -334,35 +334,71 @@ public class CalendarView extends RelativeLayout {
         }
 
         //开始时间晚于结束时间，反转时间
+        if (startSelectBean != null && endSelectBean != null &&
+                endSelectBean.getDayBean().getCalendar().before(startSelectBean.getDayBean().getCalendar())) {
+
+            selectDayBean = monthList.get(startSelectBean.getSelectRv()).getDayList().get(startSelectBean.getSelectDay());
+            selectDayBean.setContent("归还");
+            selectDayBean.setSelectState(SelectState.END);
+
+            selectDayBean = monthList.get(endSelectBean.getSelectRv()).getDayList().get(endSelectBean.getSelectDay());
+            selectDayBean.setContent("起租");
+            selectDayBean.setSelectState(SelectState.START);
+
+            try {
+                tempSelectBean = endSelectBean.clone();
+                endSelectBean = startSelectBean.clone();
+                startSelectBean = tempSelectBean;
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+
+            changeBetweenState(SelectState.BETWEEN);
+        }
+
+        handleListener();
+    }
+
+    /**
+     * 处理回调
+     */
+    private void handleListener() {
+
+        if (startSelectBean != null) {
+            if (onCalendarChange != null) {
+                onCalendarChange.onStart(startSelectBean.getDayBean());
+            }
+            changeStartText(false);
+            textMonthStart.setText(startSelectBean.getDayBean().getMonth() + "月" + startSelectBean.getDayBean().getDay() + "日");
+        } else {
+            changeStartText(true);
+        }
+
+        if (endSelectBean != null) {
+            if (onCalendarChange != null) {
+                onCalendarChange.onEnd(endSelectBean.getDayBean());
+            }
+            changeEndText(false);
+            textMonthEnd.setText(endSelectBean.getDayBean().getMonth() + "月" + endSelectBean.getDayBean().getDay() + "日");
+        } else {
+            changeEndText(true);
+        }
+
         if (startSelectBean != null && endSelectBean != null) {
-            if (endSelectBean.getDayBean().getCalendar().before(startSelectBean.getDayBean().getCalendar())) {
-
-                selectDayBean = monthList.get(startSelectBean.getSelectRv()).getDayList().get(startSelectBean.getSelectDay());
-                selectDayBean.setContent("归还");
-                selectDayBean.setSelectState(SelectState.END);
-
-                selectDayBean = monthList.get(endSelectBean.getSelectRv()).getDayList().get(endSelectBean.getSelectDay());
-                selectDayBean.setContent("起租");
-                selectDayBean.setSelectState(SelectState.START);
-
-                try {
-                    tempSelectBean = endSelectBean.clone();
-                    endSelectBean = startSelectBean.clone();
-                    startSelectBean = tempSelectBean;
-                } catch (CloneNotSupportedException e) {
-                    e.printStackTrace();
-                }
-
-                changeBetweenState(SelectState.BETWEEN);
+            days = CalendarUtils.differentDays(startSelectBean.getDayBean().getCalendar(),
+                    endSelectBean.getDayBean().getCalendar());
+            if (onCalendarChange != null) {
+                onCalendarChange.onDays(days + 1);
             }
         }
+
     }
 
 
     /**
      * 清空选项
      */
-    public void clear() {
+    private void clear() {
         if (startSelectBean == null) {
             return;
         }
@@ -380,6 +416,15 @@ public class CalendarView extends RelativeLayout {
 
         startSelectBean = null;
         endSelectBean = null;
+    }
+
+    /**
+     * 重置状态
+     */
+    public void resetState() {
+        clear();
+        changeStartText(true);
+        changeEndText(true);
     }
 
     /**
@@ -453,16 +498,40 @@ public class CalendarView extends RelativeLayout {
     }
 
     /**
-     * log打印
+     * 是否恢复初始状态
+     *
+     * @param isVisiable
      */
-    private void printLog() {
-        for (MonthBean monthBean : monthList) {
-            for (DayBean dayBean : monthBean.getDayList()) {
-                String date;
-                date = dayBean.getYear() + "-" + dayBean.getMonth() + "-" + dayBean.getDay() +
-                        "星期" + dayBean.getWeek() + "是否今天" + dayBean.isCurreDay() + "状态" + dayBean.getSelectState();
-                Log.d("CalendarView", date);
-            }
+    private void changeStartText(boolean isVisiable) {
+        textStart.setVisibility(isVisiable ? VISIBLE : GONE);
+        textMonthStart.setVisibility(!isVisiable ? VISIBLE : GONE);
+        textMontStartMark.setVisibility(!isVisiable ? VISIBLE : GONE);
+    }
+
+    /**
+     * 是否恢复初始状态
+     *
+     * @param isVisiable
+     */
+    private void changeEndText(boolean isVisiable) {
+        textEnd.setVisibility(isVisiable ? VISIBLE : GONE);
+        textMonthEnd.setVisibility(!isVisiable ? VISIBLE : GONE);
+        textMontEndMark.setVisibility(!isVisiable ? VISIBLE : GONE);
+    }
+
+    private OnCalendarChange onCalendarChange;
+
+    public void setOnCalendarChange(OnCalendarChange onCalendarChange) {
+        this.onCalendarChange = onCalendarChange;
+    }
+
+    public static abstract class OnCalendarChange {
+
+        public abstract void onStart(DayBean dayBean);
+
+        public abstract void onEnd(DayBean dayBean);
+
+        public void onDays(int day) {
         }
     }
 
