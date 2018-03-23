@@ -1,6 +1,7 @@
 package com.muzi.library;
 
 import android.content.Context;
+import android.support.annotation.IntRange;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -228,17 +229,21 @@ public class CalendarView extends RelativeLayout {
      *
      * @param days
      */
-    public void addUnableDays(int days) {
+    public void addUnableDays(@IntRange(from = 0) int days) {
+        if (days < 0)
+            return;
+
+        if (unableDays == 0 && days == 0)
+            return;
+
+        if (unableDays == days)
+            return;
+
         /**
          * 遍历查到今天的position
          */
-        tempDayBeanList = monthList.get(0).getDayList();
-        for (int i = todayDay; i < tempDayBeanList.size(); i++) {
-            if (tempDayBeanList.get(i).getDay() == todayDay) {
-                todayDayPosotion = i;
-                break;
-            }
-        }
+        todayDayPosotion = getTodayPosition();
+
         if (unableDays < days) {
             resetState();
             setUnableDaysUp(days);
@@ -259,6 +264,10 @@ public class CalendarView extends RelativeLayout {
                     } else {
                         if (tempDayBeanList.get(i1).getSelectState() == SelectState.NONE) {
                             unableDays = 0;
+                            //相当于恢复默认状态,刷新adapter
+                            if (days == 0) {
+                                calendarAdapter.notifyDataSetChanged();
+                            }
                             addUnableDays(days);
                             return;
                         }
@@ -268,6 +277,20 @@ public class CalendarView extends RelativeLayout {
             }
         }
         calendarAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 遍历查到今天的position
+     */
+    private int getTodayPosition() {
+        tempDayBeanList = monthList.get(0).getDayList();
+        for (int i = todayDay; i < tempDayBeanList.size(); i++) {
+            if (tempDayBeanList.get(i).getDay() == todayDay) {
+                todayDayPosotion = i;
+                break;
+            }
+        }
+        return todayDayPosotion;
     }
 
     /**
