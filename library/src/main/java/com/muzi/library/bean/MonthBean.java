@@ -13,6 +13,7 @@ public class MonthBean implements Cloneable {
     private int year;
     private int month;
     private int days;
+    private int emptyDays;
     private List<DayBean> dayList;
 
     public MonthBean() {
@@ -40,6 +41,14 @@ public class MonthBean implements Cloneable {
 
     public void setDays(int days) {
         this.days = days;
+    }
+
+    public int getEmptyDays() {
+        return emptyDays;
+    }
+
+    public void setEmptyDays(int emptyDays) {
+        this.emptyDays = emptyDays;
     }
 
     public List<DayBean> getDayList() {

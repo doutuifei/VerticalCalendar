@@ -93,6 +93,11 @@ public class CalendarView extends RelativeLayout {
     private SelectBean endSelectBean;
     private SelectBean tempSelectBean;
 
+    /**
+     * 不可选择天数
+     */
+    private int unableDays;
+
     public CalendarView(Context context) {
         this(context, null);
     }
@@ -140,6 +145,11 @@ public class CalendarView extends RelativeLayout {
             monthBean = new MonthBean();
             dayList = new ArrayList<>();
 
+            //计算第一天的星期
+            tempWeek = CalendarUtils.getDayOfWeekByDate(tempYear, tempMonth - 1);
+
+            addEmptyDay(tempWeek, monthBean, dayList);
+
             //当月天数
             days = CalendarUtils.getMonthLastDay(tempYear, tempMonth - 1);
 
@@ -148,11 +158,9 @@ public class CalendarView extends RelativeLayout {
                 dayBean.setYear(tempYear);
                 dayBean.setMonth(tempMonth);
                 dayBean.setDay(tempDay);
+
                 if (tempDay == 1) {
-                    //计算第一天的星期
-                    tempWeek = CalendarUtils.getDayOfWeekByDate(tempYear, tempMonth - 1);
                     dayBean.setWeek(tempWeek);
-                    addEmptyDay(tempWeek, dayList);
                 }
 
                 curreCalendar = CalendarUtils.getCurreCalendar(tempYear, tempMonth - 1, tempDay);
@@ -184,7 +192,7 @@ public class CalendarView extends RelativeLayout {
     /**
      * 填补空白天数
      */
-    private void addEmptyDay(String week, List<DayBean> dayList) {
+    private void addEmptyDay(String week, MonthBean monthBean, List<DayBean> dayList) {
         switch (week) {
             case "周日":
                 tempEmptyDays = 0;
@@ -211,17 +219,53 @@ public class CalendarView extends RelativeLayout {
         for (int i = 0; i < tempEmptyDays; i++) {
             dayList.add(new DayBean(true));
         }
+        monthBean.setEmptyDays(tempEmptyDays);
         tempEmptyDays = 0;
     }
 
     /**
      * 添加不可选择天数
      *
-     * @param unableDays
+     * @param days
      */
-    public void addUnableDays(int unableDays) {
-//        resetState();
-        setUnableDays(unableDays);
+    public void addUnableDays(int days) {
+        /**
+         * 遍历查到今天的position
+         */
+        tempDayBeanList = monthList.get(0).getDayList();
+        for (int i = todayDay; i < tempDayBeanList.size(); i++) {
+            if (tempDayBeanList.get(i).getDay() == todayDay) {
+                todayDayPosotion = i;
+                break;
+            }
+        }
+        if (unableDays < days) {
+            resetState();
+            setUnableDaysUp(days);
+            unableDays = days;
+        } else {
+            //设置今天之后可用
+            tempDayBeanList = monthList.get(0).getDayList();
+            for (int i1 = todayDayPosotion + 1; i1 < tempDayBeanList.size(); i1++) {
+                tempDayBeanList.get(i1).setSelectState(SelectState.NONE);
+            }
+            for (int i = 1; i < monthList.size(); i++) {
+                tempDayBeanList = monthList.get(i).getDayList();
+                for (int i1 = 0; i1 < tempDayBeanList.size(); i1++) {
+                    if (tempDayBeanList.get(i1).isEmpty()) {
+                        continue;
+                    } else {
+                        if (tempDayBeanList.get(i1).getSelectState() == SelectState.NONE) {
+                            unableDays = 0;
+                            addUnableDays(days);
+                            return;
+                        }
+                        tempDayBeanList.get(i1).setSelectState(SelectState.NONE);
+                    }
+                }
+            }
+        }
+        calendarAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -502,17 +546,10 @@ public class CalendarView extends RelativeLayout {
      *
      * @param days
      */
-    private void setUnableDays(int days) {
-        tempDayBeanList = monthList.get(0).getDayList();
+    private void setUnableDaysUp(int days) {
         /**
-         * 遍历查到今天的position
+         * 如果days大于新的unable天数
          */
-        for (int i = todayDay; i < tempDayBeanList.size(); i++) {
-            if (tempDayBeanList.get(i).getDay() == todayDay) {
-                todayDayPosotion = i;
-                break;
-            }
-        }
         if (todayDayPosotion + days < tempDayBeanList.size()) {
             //同月
             /**
@@ -523,10 +560,37 @@ public class CalendarView extends RelativeLayout {
             }
         } else {
             //跨月
-
+            /**
+             * 先将当月剩余天设置不可选
+             */
+            for (int i = todayDayPosotion + 1; i < tempDayBeanList.size(); i++) {
+                tempDayBeanList.get(i).setSelectState(SelectState.UNABLE);
+                days--;
+            }
+            /**
+             * 遍历剩下的月
+             */
+            while (days > 0) {
+                for (int i = 1; i < monthList.size(); i++) {
+                    tempDayBeanList = monthList.get(i).getDayList();
+                    days = days + monthList.get(i).getEmptyDays();
+                    for (int i1 = 0; i1 < tempDayBeanList.size(); i1++) {
+                        days--;
+                        if (tempDayBeanList.get(i1).isEmpty()) {
+                            continue;
+                        } else {
+                            tempDayBeanList.get(i1).setSelectState(SelectState.UNABLE);
+                        }
+                        if (days < 1) {
+                            break;
+                        }
+                    }
+                    if (days < 1) {
+                        break;
+                    }
+                }
+            }
         }
-
-        calendarAdapter.notifyDataSetChanged();
     }
 
     /**
