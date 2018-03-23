@@ -554,6 +554,7 @@ public class CalendarView extends RelativeLayout {
         /**
          * 如果days大于新的unable天数
          */
+        tempDayBeanList = monthList.get(0).getDayList();
         if (todayDayPosotion + days < tempDayBeanList.size()) {
             //同月
             /**
