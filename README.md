@@ -6,7 +6,7 @@
 
 ![img](https://github.com/mzyq/VerticalCalendar/blob/master/img/preview.gif)
 
-[APK下载](http://www.dafuai.com/a/KDyGvb)
+[APK下载](https://w-5.net/YPqDk)
 
 ## 功能
 * 连续选择
