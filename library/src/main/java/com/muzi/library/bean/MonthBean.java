@@ -12,9 +12,9 @@ public class MonthBean implements Cloneable {
 
     private int year;
     private int month;
-    private int days;
-    private int emptyDays;
-    private List<DayBean> dayList;
+    private int days;//每月天数
+    private int emptyDays;//空白天数
+    private List<DayBean> dayList;//带空白的天数集合
 
     public MonthBean() {
     }

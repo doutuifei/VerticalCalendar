@@ -244,7 +244,9 @@ public class CalendarView extends RelativeLayout {
             setUnableDaysUp(days);
             unableDays = days;
         } else {
-            //设置今天之后可用
+            /**
+             * 设置今天之后可用
+             */
             tempDayBeanList = monthList.get(0).getDayList();
             for (int i1 = todayDayPosotion + 1; i1 < tempDayBeanList.size(); i1++) {
                 tempDayBeanList.get(i1).setSelectState(SelectState.NONE);
@@ -440,6 +442,8 @@ public class CalendarView extends RelativeLayout {
             if (onCalendarChange != null) {
                 onCalendarChange.onDays(selectDays + 1);
             }
+        } else {
+            selectDays = 0;
         }
     }
 
@@ -630,6 +634,33 @@ public class CalendarView extends RelativeLayout {
         public void onDays(int day) {
         }
 
+    }
+
+    /**
+     * 获取开始日期
+     *
+     * @return
+     */
+    public SelectBean getSelectStartDays() {
+        return startSelectBean;
+    }
+
+    /**
+     * 获取结束日期
+     *
+     * @return
+     */
+    public SelectBean getSelectEndDays() {
+        return endSelectBean;
+    }
+
+    /**
+     * 获取选择天数
+     *
+     * @return
+     */
+    public int getSelectDays() {
+        return selectDays;
     }
 
 }

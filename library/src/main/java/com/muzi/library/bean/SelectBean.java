@@ -7,9 +7,9 @@ package com.muzi.library.bean;
 
 public class SelectBean implements Cloneable {
 
-    private int selectRv;
-    private int selectDay;
-    private DayBean dayBean;
+    private int selectRv;//月位置
+    private int selectDay;//日位置
+    private DayBean dayBean;//日信息
 
     public SelectBean() {
     }

@@ -13,13 +13,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="输入不可用天数，从今天以后开始计算"
         android:inputType="number" />
 
-    <Button
-        android:id="@+id/btnClear"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="清空" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnUnable"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="不可用天数" />
+
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清空" />
+
+    </LinearLayout>
 
     <com.muzi.library.CalendarView
         android:id="@+id/calendarView"
