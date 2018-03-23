@@ -256,7 +256,7 @@ public class CalendarView extends RelativeLayout {
             for (int i1 = todayDayPosotion + 1; i1 < tempDayBeanList.size(); i1++) {
                 tempDayBeanList.get(i1).setSelectState(SelectState.NONE);
             }
-            for (int i = 1 ; i < monthList.size(); i++) {
+            for (int i = 1; i < monthList.size(); i++) {
                 tempDayBeanList = monthList.get(i).getDayList();
                 for (int i1 = 0; i1 < tempDayBeanList.size(); i1++) {
                     if (tempDayBeanList.get(i1).isEmpty()) {
@@ -492,6 +492,7 @@ public class CalendarView extends RelativeLayout {
 
         startSelectBean = null;
         endSelectBean = null;
+        selectDays = 0;
     }
 
     /**
