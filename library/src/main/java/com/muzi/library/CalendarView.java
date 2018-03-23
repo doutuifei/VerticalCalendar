@@ -63,27 +63,32 @@ public class CalendarView extends RelativeLayout {
     private int tempYear;
     private int tempMonth;
     private String tempWeek;
-    private int tempEmptyDayNum;
+    private int tempEmptyDays;
 
-    private int curreYear;
-    private int curreMonth;
-    private int curreDay;
+    private int todayYear;
+    private int todayMonth;
+    private int todayDay;
 
     /**
      * 当月天数
      */
-    private int numDay;
+    private int days;
 
+    /**
+     * 点击月份position
+     */
     private int rvPosition = -1;
+    /**
+     * 今天的position
+     */
+    private int todayDayPosotion;
 
     /**
      * 选中日期
      */
     private DayBean selectDayBean;
     private List<DayBean> tempDayBeanList;
-
-    //开始和结束
-    private int days;
+    private int selectDays;
     private SelectBean startSelectBean;
     private SelectBean endSelectBean;
     private SelectBean tempSelectBean;
@@ -109,11 +114,14 @@ public class CalendarView extends RelativeLayout {
         initRecyclerView();
     }
 
+    /**
+     * 初始化今天
+     */
     private void initToday() {
         todayCalendar = Calendar.getInstance();
-        curreYear = todayCalendar.get(Calendar.YEAR);
-        curreMonth = (todayCalendar.get(Calendar.MONTH) + 1);
-        curreDay = todayCalendar.get(Calendar.DAY_OF_MONTH);
+        todayYear = todayCalendar.get(Calendar.YEAR);
+        todayMonth = (todayCalendar.get(Calendar.MONTH) + 1);
+        todayDay = todayCalendar.get(Calendar.DAY_OF_MONTH);
     }
 
     /**
@@ -133,9 +141,9 @@ public class CalendarView extends RelativeLayout {
             dayList = new ArrayList<>();
 
             //当月天数
-            numDay = CalendarUtils.getMonthLastDay(tempYear, tempMonth - 1);
+            days = CalendarUtils.getMonthLastDay(tempYear, tempMonth - 1);
 
-            for (int tempDay = 1; tempDay <= numDay; tempDay++) {
+            for (int tempDay = 1; tempDay <= days; tempDay++) {
                 dayBean = new DayBean();
                 dayBean.setYear(tempYear);
                 dayBean.setMonth(tempMonth);
@@ -151,23 +159,21 @@ public class CalendarView extends RelativeLayout {
 
                 //是否是today
                 if (CalendarUtils.equalsCalendar(curreCalendar, todayCalendar)) {
-                    dayBean.setSelectState(SelectState.UNABLE);
                     dayBean.setCurreDay(true);
                     dayBean.setContent(getContext().getString(R.string.today));
                 }
 
-                //如果是今天之前就unable
-                if (curreCalendar.before(todayCalendar)) {
+                //设置不可选择天数
+                if (curreCalendar.before(todayCalendar) ||
+                        CalendarUtils.equalsCalendar(curreCalendar, todayCalendar)) {
                     dayBean.setSelectState(SelectState.UNABLE);
                 }
-
-                //默认选中
-                onDefaultSelect(curreCalendar, dayBean);
 
                 dayList.add(dayBean);
             }
             monthBean.setYear(tempYear);
             monthBean.setMonth(tempMonth);
+            monthBean.setDays(days);
             monthBean.setDayList(dayList);
 
             monthList.add(monthBean);
@@ -181,40 +187,41 @@ public class CalendarView extends RelativeLayout {
     private void addEmptyDay(String week, List<DayBean> dayList) {
         switch (week) {
             case "周日":
-                tempEmptyDayNum = 0;
+                tempEmptyDays = 0;
                 break;
             case "周一":
-                tempEmptyDayNum = 1;
+                tempEmptyDays = 1;
                 break;
             case "周二":
-                tempEmptyDayNum = 2;
+                tempEmptyDays = 2;
                 break;
             case "周三":
-                tempEmptyDayNum = 3;
+                tempEmptyDays = 3;
                 break;
             case "周四":
-                tempEmptyDayNum = 4;
+                tempEmptyDays = 4;
                 break;
             case "周五":
-                tempEmptyDayNum = 5;
+                tempEmptyDays = 5;
                 break;
             case "周六":
-                tempEmptyDayNum = 6;
+                tempEmptyDays = 6;
                 break;
         }
-        for (int i = 0; i < tempEmptyDayNum; i++) {
+        for (int i = 0; i < tempEmptyDays; i++) {
             dayList.add(new DayBean(true));
         }
-        tempEmptyDayNum = 0;
+        tempEmptyDays = 0;
     }
 
     /**
-     * 默认选中
+     * 添加不可选择天数
      *
-     * @param calendar
+     * @param unableDays
      */
-    private void onDefaultSelect(Calendar calendar, DayBean dayBean) {
-
+    public void addUnableDays(int unableDays) {
+//        resetState();
+        setUnableDays(unableDays);
     }
 
     /**
@@ -384,10 +391,10 @@ public class CalendarView extends RelativeLayout {
         }
 
         if (startSelectBean != null && endSelectBean != null) {
-            days = CalendarUtils.differentDays(startSelectBean.getDayBean().getCalendar(),
+            selectDays = CalendarUtils.differentDays(startSelectBean.getDayBean().getCalendar(),
                     endSelectBean.getDayBean().getCalendar());
             if (onCalendarChange != null) {
-                onCalendarChange.onDays(days + 1);
+                onCalendarChange.onDays(selectDays + 1);
             }
         }
     }
@@ -488,6 +495,38 @@ public class CalendarView extends RelativeLayout {
                 }
             }
         }
+    }
+
+    /**
+     * 设置不可选择天数
+     *
+     * @param days
+     */
+    private void setUnableDays(int days) {
+        tempDayBeanList = monthList.get(0).getDayList();
+        /**
+         * 遍历查到今天的position
+         */
+        for (int i = todayDay; i < tempDayBeanList.size(); i++) {
+            if (tempDayBeanList.get(i).getDay() == todayDay) {
+                todayDayPosotion = i;
+                break;
+            }
+        }
+        if (todayDayPosotion + days < tempDayBeanList.size()) {
+            //同月
+            /**
+             * 从今天+1天开始遍历，将后unableDays天设置不可选择
+             */
+            for (int i = todayDayPosotion + 1; i < todayDayPosotion + 1 + days; i++) {
+                tempDayBeanList.get(i).setSelectState(SelectState.UNABLE);
+            }
+        } else {
+            //跨月
+
+        }
+
+        calendarAdapter.notifyDataSetChanged();
     }
 
     /**
