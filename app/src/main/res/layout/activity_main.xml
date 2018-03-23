@@ -8,6 +8,13 @@
     tools:context="com.muzi.verticalcalendar.MainActivity">
 
 
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number" />
+
     <Button
         android:id="@+id/btnClear"
         android:layout_width="match_parent"
