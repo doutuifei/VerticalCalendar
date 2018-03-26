@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.muzi.verticalcalendar"
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -27,5 +27,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile project(':library')
+//    compile project(':library')
+    compile 'com.github.mzyq:VerticalCalendar:0.1.0'
 }
+

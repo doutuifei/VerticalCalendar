@@ -15,7 +15,7 @@ public class DayBean implements Cloneable {
     /**
      * 是否今天
      */
-    private boolean isCurreDay;
+    private boolean isTodayDay;
     /**
      * 补全空白
      */
@@ -45,12 +45,12 @@ public class DayBean implements Cloneable {
         this.isEmpty = isEmpty;
     }
 
-    public boolean isCurreDay() {
-        return isCurreDay;
+    public boolean isTodayDay() {
+        return isTodayDay;
     }
 
-    public void setCurreDay(boolean curreDay) {
-        isCurreDay = curreDay;
+    public void setTodayDay(boolean todayDay) {
+        isTodayDay = todayDay;
     }
 
     public String getWeek() {

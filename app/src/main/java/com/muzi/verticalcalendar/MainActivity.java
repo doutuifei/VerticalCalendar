@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.muzi.library.CalendarView;
 import com.muzi.library.bean.DayBean;
@@ -36,22 +35,20 @@ public class MainActivity extends AppCompatActivity {
                 calendarView.addUnableDays(Integer.parseInt(editText.getText().toString().trim()));
             }
         });
+        calendarView.resetState();
 
         calendarView.setOnCalendarChange(new CalendarView.OnCalendarChange() {
             @Override
             public void onStart(DayBean dayBean) {
-
             }
 
             @Override
             public void onEnd(DayBean dayBean) {
-
             }
 
             @Override
             public void onDays(int day) {
                 super.onDays(day);
-                Toast.makeText(MainActivity.this, "选择了:" + day + "天", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -168,7 +168,7 @@ public class CalendarView extends RelativeLayout {
 
                 //是否是today
                 if (CalendarUtils.equalsCalendar(curreCalendar, todayCalendar)) {
-                    dayBean.setCurreDay(true);
+                    dayBean.setTodayDay(true);
                     dayBean.setContent(getContext().getString(R.string.today));
                 }
 
@@ -462,8 +462,9 @@ public class CalendarView extends RelativeLayout {
         if (startSelectBean != null && endSelectBean != null) {
             selectDays = CalendarUtils.differentDays(startSelectBean.getDayBean().getCalendar(),
                     endSelectBean.getDayBean().getCalendar());
+            selectDays++;
             if (onCalendarChange != null) {
-                onCalendarChange.onDays(selectDays + 1);
+                onCalendarChange.onDays(selectDays);
             }
         } else {
             selectDays = 0;
