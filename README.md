@@ -1,6 +1,4 @@
-# VerticalCalendar
-自定义日历选择
-
+# 自定义日历选择
 
 [![](https://jitpack.io/v/mzyq/VerticalCalendar.svg)](https://jitpack.io/#mzyq/VerticalCalendar)
 
@@ -30,7 +28,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.mzyq:VerticalCalendar:v0.1.0'
+        compile 'com.github.mzyq:VerticalCalendar:0.1.0'
     }
 ```
 
@@ -48,6 +46,6 @@ dependencies {
 <dependency>
     <groupId>com.github.mzyq</groupId>
     <artifactId>VerticalCalendar</artifactId>
-    <version>v0.1.0</version>
+    <version>0.1.0</version>
 </dependency>
 ```
