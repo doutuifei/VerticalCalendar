@@ -8,6 +8,42 @@
 
 [APK下载](https://w-5.net/YPqDk)
 
+## 使用
+
+### Gradle
+```
+allprojects {
+    repositories {
+		...
+		maven { url 'https://jitpack.io' }
+		}
+	}
+```
+
+```
+dependencies {
+        compile 'com.github.mzyq:VerticalCalendar:0.1.2'
+    }
+```
+
+### Maven
+```
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
+```
+<dependency>
+    <groupId>com.github.mzyq</groupId>
+    <artifactId>VerticalCalendar</artifactId>
+    <version>0.1.2</version>
+</dependency>
+```
+
 ## 功能
 * 默认显示6个月信息
 * 连续选择
@@ -97,69 +133,35 @@ public class DayBean {
 * get方法
 
 ```
-    /**
-     * 获取开始日期
-     *
-     * @return
-     */
-    public SelectBean getSelectStartDays() {
-        return startSelectBean;
-    }
+      /**
+        * 获取开始日期
+        *
+        * @return
+        */
+       public DayBean getSelectStartDays() {
+           return startSelectBean.getDayBean();
+       }
 
-    /**
-     * 获取结束日期
-     *
-     * @return
-     */
-    public SelectBean getSelectEndDays() {
-        return endSelectBean;
-    }
+       /**
+        * 获取结束日期
+        *
+        * @return
+        */
+       public DayBean getSelectEndDays() {
+           return endSelectBean.getDayBean();
+       }
 
-    /**
-     * 获取选择天数
-     *
-     * @return
-     */
-    public int getSelectDays() {
-        return selectDays;
-    }
-```
-
-## 使用
-
-### Gradle
-```
-allprojects {
-    repositories {
-		...
-		maven { url 'https://jitpack.io' }
-		}
-	}
+       /**
+        * 获取选择天数
+        *
+        * @return
+        */
+       public int getSelectDays() {
+           return selectDays;
+       }
 ```
 
-```
-dependencies {
-        compile 'com.github.mzyq:VerticalCalendar:0.1.0'
-    }
-```
 
-### Maven
-```
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-```
-<dependency>
-    <groupId>com.github.mzyq</groupId>
-    <artifactId>VerticalCalendar</artifactId>
-    <version>0.1.0</version>
-</dependency>
-```
 
 ## 混淆
 ```

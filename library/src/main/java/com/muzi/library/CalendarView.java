@@ -667,8 +667,8 @@ public class CalendarView extends RelativeLayout {
      *
      * @return
      */
-    public SelectBean getSelectStartDays() {
-        return startSelectBean;
+    public DayBean getSelectStartDays() {
+        return startSelectBean.getDayBean();
     }
 
     /**
@@ -676,8 +676,8 @@ public class CalendarView extends RelativeLayout {
      *
      * @return
      */
-    public SelectBean getSelectEndDays() {
-        return endSelectBean;
+    public DayBean getSelectEndDays() {
+        return endSelectBean.getDayBean();
     }
 
     /**
