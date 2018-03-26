@@ -13,3 +13,39 @@
 * 设置不可选项
 * 自动调换开始和结束位置
 * 回调和get获取选择的日期信息
+
+## 使用
+
+### Gradle
+```
+allprojects {
+    repositories {
+		...
+		maven { url 'https://jitpack.io' }
+		}
+	}
+```
+
+```
+dependencies {
+        compile 'com.github.mzyq:VerticalCalendar:v0.1.0'
+    }
+```
+
+### Maven
+```
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
+```
+<dependency>
+    <groupId>com.github.mzyq</groupId>
+    <artifactId>VerticalCalendar</artifactId>
+    <version>v0.1.0</version>
+</dependency>
+```
