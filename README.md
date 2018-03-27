@@ -1,6 +1,5 @@
 # 自定义日历选择
 
-[![](https://jitpack.io/v/mzyq/VerticalCalendar.svg)](https://jitpack.io/#mzyq/VerticalCalendar)
 
 ## 效果图
 
@@ -9,6 +8,8 @@
 [APK下载](https://w-5.net/YPqDk)
 
 ## 使用
+
+[![](https://jitpack.io/v/mzyq/VerticalCalendar.svg)](https://jitpack.io/#mzyq/VerticalCalendar)
 
 ### Gradle
 ```
@@ -22,7 +23,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.mzyq:VerticalCalendar:0.1.2'
+        compile 'com.github.mzyq:VerticalCalendar:{VERSION}'
     }
 ```
 
@@ -40,9 +41,10 @@ dependencies {
 <dependency>
     <groupId>com.github.mzyq</groupId>
     <artifactId>VerticalCalendar</artifactId>
-    <version>0.1.2</version>
+    <version>{VERSION}</version>
 </dependency>
 ```
+>{VERSION}替换为上面的版本号
 
 ## 功能
 * 默认显示6个月信息
