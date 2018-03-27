@@ -44,6 +44,7 @@ dependencies {
     <version>{VERSION}</version>
 </dependency>
 ```
+
 >{VERSION}替换为上面的版本号
 
 ## 功能
