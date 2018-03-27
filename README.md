@@ -165,6 +165,7 @@ public class DayBean {
 ```
 
 ## 日志
+* 0.1.5:重新设计在途tag
 * 0.1.4:优化在途tag, addUnableDays()-->setUnableDays();
 * 0.1.3:增加在途tag
 * 0.1.2:优化get返回的数据

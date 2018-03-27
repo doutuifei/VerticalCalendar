@@ -364,9 +364,6 @@ public class CalendarView extends RelativeLayout {
                     startSelectBean.setDayBean(dayBean);
                     startSelectBean.setSelectRv(rvPosition);
                     startSelectBean.setSelectDay(dayPosition);
-
-                    //显示在途
-                    setOnOrder();
                 }
                 break;
             case SelectState.SINGLE:
@@ -374,9 +371,6 @@ public class CalendarView extends RelativeLayout {
                 dayBean.setSelectState(SelectState.PREVIEW_START);
                 dayBean.setContent(getContext().getString(R.string.calendarStart));
                 endSelectBean = null;
-
-                //显示在途
-                setOnOrder();
                 break;
             case SelectState.PREVIEW_START:
                 //准备开始
@@ -397,9 +391,6 @@ public class CalendarView extends RelativeLayout {
                 startSelectBean.setSelectRv(rvPosition);
                 startSelectBean.setSelectDay(dayPosition);
                 endSelectBean = null;
-
-                //显示在途
-                setOnOrder();
                 break;
             case SelectState.BETWEEN:
                 //中间
@@ -411,9 +402,6 @@ public class CalendarView extends RelativeLayout {
                 startSelectBean.setSelectRv(rvPosition);
                 startSelectBean.setSelectDay(dayPosition);
                 endSelectBean = null;
-
-                //显示在途
-                setOnOrder();
                 break;
             case SelectState.END:
                 //结束
@@ -425,9 +413,6 @@ public class CalendarView extends RelativeLayout {
                 startSelectBean.setSelectRv(rvPosition);
                 startSelectBean.setSelectDay(dayPosition);
                 endSelectBean = null;
-
-                //显示在途
-                setOnOrder();
                 break;
         }
 
@@ -454,8 +439,10 @@ public class CalendarView extends RelativeLayout {
             //选中中间
             changeBetweenState(SelectState.BETWEEN);
 
-            //重置在途
-            clearContent();
+        }
+
+        //显示在途
+        if (endSelectBean != null) {
             setOnOrder();
         }
 
