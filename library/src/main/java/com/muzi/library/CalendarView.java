@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.IntRange;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -82,7 +83,7 @@ public class CalendarView extends RelativeLayout {
     /**
      * 今天的position
      */
-    private int todayDayPosotion;
+    private int todayDayPosotion = -1;
 
     /**
      * 选中日期
@@ -98,6 +99,11 @@ public class CalendarView extends RelativeLayout {
      * 不可选择天数
      */
     private int unableDays;
+
+    /**
+     * 在途天数
+     */
+    private int onOrders;
 
     public CalendarView(Context context) {
         this(context, null);
@@ -242,7 +248,7 @@ public class CalendarView extends RelativeLayout {
         /**
          * 遍历查到今天的position
          */
-        todayDayPosotion = getTodayPosition();
+        getTodayPosition();
 
         if (unableDays < days) {
             resetState();
@@ -282,15 +288,16 @@ public class CalendarView extends RelativeLayout {
     /**
      * 遍历查到今天的position
      */
-    private int getTodayPosition() {
-        tempDayBeanList = monthList.get(0).getDayList();
-        for (int i = todayDay; i < tempDayBeanList.size(); i++) {
-            if (tempDayBeanList.get(i).getDay() == todayDay) {
-                todayDayPosotion = i;
-                break;
+    private void getTodayPosition() {
+        if (todayDayPosotion < 0) {
+            tempDayBeanList = monthList.get(0).getDayList();
+            for (int i = todayDay; i < tempDayBeanList.size(); i++) {
+                if (tempDayBeanList.get(i).getDay() == todayDay) {
+                    todayDayPosotion = i;
+                    break;
+                }
             }
         }
-        return todayDayPosotion;
     }
 
     /**
@@ -356,6 +363,9 @@ public class CalendarView extends RelativeLayout {
                     startSelectBean.setDayBean(dayBean);
                     startSelectBean.setSelectRv(rvPosition);
                     startSelectBean.setSelectDay(dayPosition);
+
+                    //显示在途
+                    setOnOrder();
                 }
                 break;
             case SelectState.SINGLE:
@@ -363,6 +373,9 @@ public class CalendarView extends RelativeLayout {
                 dayBean.setSelectState(SelectState.PREVIEW_START);
                 dayBean.setContent(getContext().getString(R.string.calendarStart));
                 endSelectBean = null;
+
+                //显示在途
+                setOnOrder();
                 break;
             case SelectState.PREVIEW_START:
                 //准备开始
@@ -383,6 +396,9 @@ public class CalendarView extends RelativeLayout {
                 startSelectBean.setSelectRv(rvPosition);
                 startSelectBean.setSelectDay(dayPosition);
                 endSelectBean = null;
+
+                //显示在途
+                setOnOrder();
                 break;
             case SelectState.BETWEEN:
                 //中间
@@ -394,6 +410,9 @@ public class CalendarView extends RelativeLayout {
                 startSelectBean.setSelectRv(rvPosition);
                 startSelectBean.setSelectDay(dayPosition);
                 endSelectBean = null;
+
+                //显示在途
+                setOnOrder();
                 break;
             case SelectState.END:
                 //结束
@@ -404,8 +423,10 @@ public class CalendarView extends RelativeLayout {
                 startSelectBean.setDayBean(dayBean);
                 startSelectBean.setSelectRv(rvPosition);
                 startSelectBean.setSelectDay(dayPosition);
-
                 endSelectBean = null;
+
+                //显示在途
+                setOnOrder();
                 break;
         }
 
@@ -433,6 +454,59 @@ public class CalendarView extends RelativeLayout {
         }
 
         handleListener();
+    }
+
+    /**
+     * 设置在途
+     */
+    private void setOnOrder() {
+        if (unableDays == 0) {
+            return;
+        }
+        onOrders = unableDays;
+        if (startSelectBean.getDayBean().getDay() > onOrders) {
+            //同月
+            for (int i = startSelectBean.getSelectDay() - 1; i > startSelectBean.getSelectDay() - 1 - onOrders; i--) {
+                monthList.get(startSelectBean.getSelectRv()).getDayList().get(i).setContent(getContext().getString(R.string.onOrder));
+            }
+        } else {
+            //跨月
+            /**
+             * 先设置当前月
+             */
+            for (int i = startSelectBean.getSelectDay() - 1; i >= 0; i--) {
+                if (monthList.get(startSelectBean.getSelectRv()).getDayList().get(i).isEmpty()) {
+                    break;
+                }
+                monthList.get(startSelectBean.getSelectRv()).getDayList().get(i).setContent(getContext().getString(R.string.onOrder));
+                --onOrders;
+            }
+
+            /**
+             * 遍历设置剩下的月份
+             */
+            while (onOrders > 0) {
+                if (startSelectBean.getSelectRv() - 1 < 0) {
+                    return;
+                }
+                for (int i = startSelectBean.getSelectRv() - 1; i >= 0; i--) {
+                    tempDayBeanList = monthList.get(i).getDayList();
+                    for (int i1 = tempDayBeanList.size() - 1; i1 >= 0; i1--) {
+                        if (tempDayBeanList.get(i1).isEmpty()) {
+                            break;
+                        }
+                        if (onOrders <= 0) {
+                            return;
+                        }
+                        tempDayBeanList.get(i1).setContent(getContext().getString(R.string.onOrder));
+                        --onOrders;
+                    }
+                    if (onOrders <= 0) {
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -479,6 +553,7 @@ public class CalendarView extends RelativeLayout {
         if (startSelectBean == null) {
             return;
         }
+        clearContent();
         if (endSelectBean == null) {
             //只选择开始
             changeStartState(SelectState.NONE, null);
@@ -494,6 +569,46 @@ public class CalendarView extends RelativeLayout {
         startSelectBean = null;
         endSelectBean = null;
         selectDays = 0;
+    }
+
+    /**
+     * 清除内容
+     */
+    private void clearContent() {
+        getTodayPosition();
+        Log.d("CalendarView", "起租:" + startSelectBean.getDayBean().toString());
+
+        /**
+         * 先遍历当前月，从今天之后开始遍历
+         */
+        tempDayBeanList = monthList.get(0).getDayList();
+        for (int i1 = todayDayPosotion + 1; i1 < tempDayBeanList.size(); i1++) {
+            if (tempDayBeanList.get(i1).isEmpty()) {
+                continue;
+            }
+            tempDayBeanList.get(i1).setContent(null);
+            Log.d("CalendarView", tempDayBeanList.get(i1).toString());
+            if (CalendarUtils.equalsCalendar(tempDayBeanList.get(i1).getCalendar(), startSelectBean.getDayBean().getCalendar())) {
+                return;
+            }
+        }
+
+        /**
+         * 然后遍历剩下的月份，遍历到起租日期停止
+         */
+        for (int i = 1; i < monthList.size(); i++) {
+            tempDayBeanList = monthList.get(i).getDayList();
+            for (int i1 = 0; i1 < tempDayBeanList.size(); i1++) {
+                if (tempDayBeanList.get(i1).isEmpty()) {
+                    continue;
+                }
+                tempDayBeanList.get(i1).setContent(null);
+                Log.d("CalendarView", tempDayBeanList.get(i1).toString());
+                if (CalendarUtils.equalsCalendar(tempDayBeanList.get(i1).getCalendar(), startSelectBean.getDayBean().getCalendar())) {
+                    return;
+                }
+            }
+        }
     }
 
     /**
