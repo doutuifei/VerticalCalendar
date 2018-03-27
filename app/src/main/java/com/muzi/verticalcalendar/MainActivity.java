@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         btnUnable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendarView.addUnableDays(Integer.parseInt(editText.getText().toString().trim()));
+                calendarView.setUnableDays(Integer.parseInt(editText.getText().toString().trim()));
             }
         });
         calendarView.resetState();

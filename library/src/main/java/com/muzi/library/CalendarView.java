@@ -236,7 +236,7 @@ public class CalendarView extends RelativeLayout {
      *
      * @param days
      */
-    public void addUnableDays(@IntRange(from = 0) int days) {
+    public void setUnableDays(@IntRange(from = 0) int days) {
         if (days < 0)
             return;
 
@@ -275,7 +275,7 @@ public class CalendarView extends RelativeLayout {
                             if (days == 0) {
                                 calendarAdapter.notifyDataSetChanged();
                             }
-                            addUnableDays(days);
+                            setUnableDays(days);
                             return;
                         }
                         tempDayBeanList.get(i1).setSelectState(SelectState.NONE);
@@ -451,9 +451,15 @@ public class CalendarView extends RelativeLayout {
                 e.printStackTrace();
             }
 
+            //选中中间
             changeBetweenState(SelectState.BETWEEN);
+
+            //重置在途
+            clearContent();
+            setOnOrder();
         }
 
+        //处理点击事件
         handleListener();
     }
 
