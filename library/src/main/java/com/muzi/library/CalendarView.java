@@ -592,10 +592,10 @@ public class CalendarView extends RelativeLayout {
             if (tempDayBeanList.get(i1).isEmpty()) {
                 continue;
             }
-            tempDayBeanList.get(i1).setContent(null);
             if (CalendarUtils.equalsCalendar(tempDayBeanList.get(i1).getCalendar(), startSelectBean.getDayBean().getCalendar())) {
                 return;
             }
+            tempDayBeanList.get(i1).setContent(null);
         }
 
         /**
@@ -607,10 +607,10 @@ public class CalendarView extends RelativeLayout {
                 if (tempDayBeanList.get(i1).isEmpty()) {
                     continue;
                 }
-                tempDayBeanList.get(i1).setContent(null);
                 if (CalendarUtils.equalsCalendar(tempDayBeanList.get(i1).getCalendar(), startSelectBean.getDayBean().getCalendar())) {
                     return;
                 }
+                tempDayBeanList.get(i1).setContent(null);
             }
         }
     }
