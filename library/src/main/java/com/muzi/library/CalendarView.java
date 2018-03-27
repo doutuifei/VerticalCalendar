@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.IntRange;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -155,6 +154,7 @@ public class CalendarView extends RelativeLayout {
             //计算第一天的星期
             tempWeek = CalendarUtils.getDayOfWeekByDate(tempYear, tempMonth - 1);
 
+            //补全空白天数
             addEmptyDay(tempWeek, monthBean, dayList);
 
             //当月天数
@@ -166,6 +166,7 @@ public class CalendarView extends RelativeLayout {
                 dayBean.setMonth(tempMonth);
                 dayBean.setDay(tempDay);
 
+                //只保存每月第一天星期
                 if (tempDay == 1) {
                     dayBean.setWeek(tempWeek);
                 }
@@ -572,11 +573,10 @@ public class CalendarView extends RelativeLayout {
     }
 
     /**
-     * 清除内容
+     * 清除内容-在途
      */
     private void clearContent() {
         getTodayPosition();
-        Log.d("CalendarView", "起租:" + startSelectBean.getDayBean().toString());
 
         /**
          * 先遍历当前月，从今天之后开始遍历
@@ -587,7 +587,6 @@ public class CalendarView extends RelativeLayout {
                 continue;
             }
             tempDayBeanList.get(i1).setContent(null);
-            Log.d("CalendarView", tempDayBeanList.get(i1).toString());
             if (CalendarUtils.equalsCalendar(tempDayBeanList.get(i1).getCalendar(), startSelectBean.getDayBean().getCalendar())) {
                 return;
             }
@@ -603,7 +602,6 @@ public class CalendarView extends RelativeLayout {
                     continue;
                 }
                 tempDayBeanList.get(i1).setContent(null);
-                Log.d("CalendarView", tempDayBeanList.get(i1).toString());
                 if (CalendarUtils.equalsCalendar(tempDayBeanList.get(i1).getCalendar(), startSelectBean.getDayBean().getCalendar())) {
                     return;
                 }
