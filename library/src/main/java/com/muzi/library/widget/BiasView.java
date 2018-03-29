@@ -63,7 +63,7 @@ public class BiasView extends View {
         super.onDraw(canvas);
         paint.setColor(Color.parseColor("#eaeaea"));
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, 1, getContext().getResources().getDisplayMetrics()));
+        paint.setStrokeWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, 2, getContext().getResources().getDisplayMetrics()));
         paint.setAntiAlias(true);
         canvas.drawLine(width, 0, 0, height, paint);
     }

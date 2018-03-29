@@ -25,7 +25,7 @@
         android:id="@+id/viewStart"
         android:layout_width="158dp"
         android:layout_height="60dp"
-        android:layout_toStartOf="@id/line"
+        android:layout_toLeftOf="@id/line"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -63,7 +63,7 @@
         android:id="@+id/viewEnd"
         android:layout_width="158dp"
         android:layout_height="60dp"
-        android:layout_toEndOf="@id/line"
+        android:layout_toRightOf="@id/line"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -135,10 +135,17 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/guideLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/viewWeek"
+        android:background="#eaeaea" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/viewWeek" />
+        android:layout_below="@id/guideLine" />
 
 </RelativeLayout>
