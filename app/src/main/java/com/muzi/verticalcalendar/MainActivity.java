@@ -9,11 +9,14 @@ import android.widget.EditText;
 import com.muzi.library.CalendarView;
 import com.muzi.library.bean.DayBean;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
 
     private CalendarView calendarView;
     private Button btnClear, btnUnable;
     private EditText editText;
+    private Calendar activeStart, activeEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,5 +54,34 @@ public class MainActivity extends AppCompatActivity {
                 super.onDays(day);
             }
         });
+
+        activeStart = Calendar.getInstance();
+
+        activeEnd = Calendar.getInstance();
+
+
+        activeStart.add(Calendar.DAY_OF_MONTH, 3);
+        activeEnd.add(Calendar.DAY_OF_MONTH, 30);
+
+//        calendarView.setOnIntercept(new OnIntercept() {
+//            @Override
+//            public void onIntercept(Calendar today, List<MonthBean> monthList, CalendarAdapter adapter) {
+//                for (MonthBean monthBean : monthList) {
+//                    for (DayBean dayBean : monthBean.getDayList()) {
+//                        if (dayBean.getCalendar().before(activeStart) ||
+//                                dayBean.getCalendar().after(activeEnd)) {
+//                            dayBean.setSelectState(SelectState.UNABLE);
+//                        }
+//                    }
+//                }
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
+
+        /**
+         * 设置区间可用
+         * 与上面的方法相同
+         */
+        calendarView.setEnableRange(activeStart, activeEnd);
     }
 }

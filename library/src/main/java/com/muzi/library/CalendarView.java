@@ -15,6 +15,7 @@ import com.muzi.library.adapter.CalendarAdapter;
 import com.muzi.library.bean.DayBean;
 import com.muzi.library.bean.MonthBean;
 import com.muzi.library.bean.SelectBean;
+import com.muzi.library.inter.OnIntercept;
 import com.muzi.library.manager.MLinearLayoutManager;
 import com.muzi.library.utils.CalendarUtils;
 
@@ -576,7 +577,8 @@ public class CalendarView extends RelativeLayout {
          */
         tempDayBeanList = monthList.get(0).getDayList();
         for (int i1 = todayDayPosotion + 1; i1 < tempDayBeanList.size(); i1++) {
-            if (tempDayBeanList.get(i1).isEmpty()) {
+            if (tempDayBeanList.get(i1).isEmpty() ||
+                    tempDayBeanList.get(i1).isTodayDay()) {
                 continue;
             }
             if (CalendarUtils.equalsCalendar(tempDayBeanList.get(i1).getCalendar(), startSelectBean.getDayBean().getCalendar())) {
@@ -591,7 +593,8 @@ public class CalendarView extends RelativeLayout {
         for (int i = 1; i < monthList.size(); i++) {
             tempDayBeanList = monthList.get(i).getDayList();
             for (int i1 = 0; i1 < tempDayBeanList.size(); i1++) {
-                if (tempDayBeanList.get(i1).isEmpty()) {
+                if (tempDayBeanList.get(i1).isEmpty() ||
+                        tempDayBeanList.get(i1).isTodayDay()) {
                     continue;
                 }
                 if (CalendarUtils.equalsCalendar(tempDayBeanList.get(i1).getCalendar(), startSelectBean.getDayBean().getCalendar())) {
@@ -794,5 +797,50 @@ public class CalendarView extends RelativeLayout {
     public int getSelectDays() {
         return selectDays;
     }
+
+    /**
+     * 自定义处理
+     * 必须调用adapter.notifyDataSetChanged();
+     *
+     * @param onIntercept
+     */
+    public void setOnIntercept(OnIntercept onIntercept) {
+        if (onIntercept != null) {
+            onIntercept.onIntercept(todayCalendar, monthList, calendarAdapter);
+        }
+    }
+
+    /**
+     * 设置可用范围
+     *
+     * @param start
+     * @param end
+     */
+    public void setEnableRange(Calendar start, Calendar end) {
+        for (MonthBean monthBean : monthList) {
+            for (DayBean dayBean : monthBean.getDayList()) {
+                if (dayBean.getCalendar().before(start) ||
+                        dayBean.getCalendar().after(end)) {
+                    dayBean.setSelectState(SelectState.UNABLE);
+                }
+            }
+        }
+        calendarAdapter.notifyDataSetChanged();
+    }
+
+    public void setEnableRange(String startDate, String endDate) {
+        Calendar start = CalendarUtils.getCalendarDate(startDate);
+        Calendar end = CalendarUtils.getCalendarDate(endDate);
+        for (MonthBean monthBean : monthList) {
+            for (DayBean dayBean : monthBean.getDayList()) {
+                if (dayBean.getCalendar().before(start) ||
+                        dayBean.getCalendar().after(end)) {
+                    dayBean.setSelectState(SelectState.UNABLE);
+                }
+            }
+        }
+        calendarAdapter.notifyDataSetChanged();
+    }
+
 
 }

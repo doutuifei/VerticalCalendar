@@ -55,10 +55,10 @@ dependencies {
 * 回调和get获取选择的日期信息
 
 ## 方法
-* addUnableDays(int days);
+* ```addUnableDays(int days);```
 设置今天之后不可点击选择的天数
 
-* resetState();
+* ```resetState();```
 取消所有选中，但是不会取消不可点击的天数，可以使用
 ```addUnableDays(0);```
 
@@ -162,6 +162,26 @@ public class DayBean {
        public int getSelectDays() {
            return selectDays;
        }
+```
+* 设置区间可用（区间以外都不点击）```setEnableRange(Calendar start, Calendar end);```
+
+* 自定义拦截处理```setOnIntercept(OnIntercept onIntercept);```
+> 示例：遍历列表设置区间可用
+```
+ calendarView.setOnIntercept(new OnIntercept() {
+            @Override
+            public void onIntercept(Calendar today, List<MonthBean> monthList, CalendarAdapter adapter) {
+                for (MonthBean monthBean : monthList) {
+                    for (DayBean dayBean : monthBean.getDayList()) {
+                        if (dayBean.getCalendar().before(activeStart) ||
+                                dayBean.getCalendar().after(activeEnd)) {
+                            dayBean.setSelectState(SelectState.UNABLE);
+                        }
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
 ```
 
 ## 日志

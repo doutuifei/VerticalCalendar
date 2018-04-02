@@ -1,7 +1,9 @@
 package com.muzi.library.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by muzi on 2018/3/22.
@@ -105,5 +107,37 @@ public class CalendarUtils {
             //不同年
             return day2 - day1;
         }
+    }
+
+    /**
+     * Calendar to String
+     *
+     * @param calendar
+     * @return
+     */
+    public static String getStringDate(Calendar calendar) {
+        if (calendar == null) {
+            return null;
+        }
+        return calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    /**
+     * String to Calendar
+     *
+     * @param s
+     * @return
+     */
+    public static Calendar getCalendarDate(String s) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = format.parse(s);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            return calendar;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
