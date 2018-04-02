@@ -53,6 +53,8 @@ dependencies {
 * 设置不可选项
 * 自动调换开始和结束位置
 * 回调和get获取选择的日期信息
+* 设置可用区间
+* 自定义拦截区间
 
 ## 方法
 * ```addUnableDays(int days);```
@@ -185,6 +187,7 @@ public class DayBean {
 ```
 
 ## 日志
+* 0.1.6:增加区间和拦截
 * 0.1.5:重新设计在途tag
 * 0.1.4:优化在途tag, addUnableDays()-->setUnableDays();
 * 0.1.3:增加在途tag
