@@ -817,6 +817,9 @@ public class CalendarView extends RelativeLayout {
      * @param end
      */
     public void setEnableRange(Calendar start, Calendar end) {
+        if (start == null || end == null) {
+            return;
+        }
         for (MonthBean monthBean : monthList) {
             for (DayBean dayBean : monthBean.getDayList()) {
                 if (dayBean.getCalendar().before(start) ||
@@ -828,19 +831,16 @@ public class CalendarView extends RelativeLayout {
         calendarAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 设置可用范围 yyyy-MM-dd HH:mm:ss
+     *
+     * @param startDate
+     * @param endDate
+     */
     public void setEnableRange(String startDate, String endDate) {
         Calendar start = CalendarUtils.getCalendarDate(startDate);
         Calendar end = CalendarUtils.getCalendarDate(endDate);
-        for (MonthBean monthBean : monthList) {
-            for (DayBean dayBean : monthBean.getDayList()) {
-                if (dayBean.getCalendar().before(start) ||
-                        dayBean.getCalendar().after(end)) {
-                    dayBean.setSelectState(SelectState.UNABLE);
-                }
-            }
-        }
-        calendarAdapter.notifyDataSetChanged();
+        setEnableRange(start, end);
     }
-
 
 }

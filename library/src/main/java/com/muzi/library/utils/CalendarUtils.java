@@ -129,7 +129,7 @@ public class CalendarUtils {
      * @return
      */
     public static Calendar getCalendarDate(String s) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date date = format.parse(s);
             Calendar calendar = Calendar.getInstance();
