@@ -187,7 +187,8 @@ public class DayBean {
 ```
 
 ## 日志
-* 0.1.6:增加区间和拦截
+* 0.1.8:增加区间和拦截
+* 0.1.6-0.1.7:UI调整
 * 0.1.5:重新设计在途tag
 * 0.1.4:优化在途tag, addUnableDays()-->setUnableDays();
 * 0.1.3:增加在途tag
