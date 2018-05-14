@@ -82,6 +82,6 @@ public class MainActivity extends AppCompatActivity {
          * 设置区间可用
          * 与上面的方法相同
          */
-        calendarView.setEnableRange(activeStart, activeEnd);
+//        calendarView.setEnableRange(activeStart, activeEnd);
     }
 }

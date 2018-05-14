@@ -2,6 +2,7 @@ package com.muzi.library;
 
 import android.content.Context;
 import android.support.annotation.IntRange;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.muzi.library.bean.SelectBean;
 import com.muzi.library.inter.OnIntercept;
 import com.muzi.library.manager.MLinearLayoutManager;
 import com.muzi.library.utils.CalendarUtils;
+import com.muzi.library.view.PagingScrollHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -306,7 +308,16 @@ public class CalendarView extends RelativeLayout {
      * 初始化RecyclerView
      */
     private void initRecyclerView() {
-        recyclerView.setLayoutManager(new MLinearLayoutManager(getContext()));
+        PagingScrollHelper scrollHelper = new PagingScrollHelper();
+        scrollHelper.setUpRecycleView(recyclerView);
+        //设置页面滚动监听
+        scrollHelper.setOnPageChangeListener(new PagingScrollHelper.onPageChangeListener() {
+            @Override
+            public void onPageChange(int index) {
+
+            }
+        });
+        recyclerView.setLayoutManager(new MLinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false));
         calendarAdapter = new CalendarAdapter(getContext(), R.layout.item_month, monthList);
         recyclerView.setAdapter(calendarAdapter);
         recyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
