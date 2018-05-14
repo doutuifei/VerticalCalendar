@@ -3,49 +3,13 @@
 
 ## 效果图
 
-![img](https://github.com/mzyq/VerticalCalendar/blob/master/img/preview.gif)
+![img](https://github.com/mzyq/VerticalCalendar/blob/v_horizontal/img/previewH.gif)
 
 [APK下载](https://w-5.net/YPqDk)
 
 ## 使用
-
-[![](https://jitpack.io/v/mzyq/VerticalCalendar.svg)](https://jitpack.io/#mzyq/VerticalCalendar)
-
-### Gradle
-```
-allprojects {
-    repositories {
-		...
-		maven { url 'https://jitpack.io' }
-		}
-	}
-```
-
-```
-dependencies {
-        compile 'com.github.mzyq:VerticalCalendar:{VERSION}'
-    }
-```
-
-### Maven
-```
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-```
-<dependency>
-    <groupId>com.github.mzyq</groupId>
-    <artifactId>VerticalCalendar</artifactId>
-    <version>{VERSION}</version>
-</dependency>
-```
-
->{VERSION}替换为上面的版本号
+> 暂时没有提供依赖方法，自行下载代码导入即可。<br>
+The method of dependency is not provided at the moment, and the code can be imported by oneself.
 
 ## 功能
 * 默认显示6个月信息
