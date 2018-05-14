@@ -55,6 +55,7 @@ dependencies {
 * 回调和get获取选择的日期信息
 * 设置可用区间
 * 自定义拦截区间
+* ***如果喜欢横向滑动，可以切换到```v_horizontal```分支***
 
 ## 方法
 * ```addUnableDays(int days);```
